@@ -6,17 +6,21 @@
     @Author xuhuawei
     @attention： 
 '''
+from math import floor
+
 from flask import current_app
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from app import login_manager
+from app.helpers.libs.enums import PendingStatus
 from app.helpers.libs.helper import is_isbn_or_key
 from app.helpers.spider.yushu_book import YuShuBook
 from app.models.base import db, Base
 
 # User Model 需要继承 flask-login 的 UserMixin 类，继承插件的许多内置函数和属性，不然很多内置的功能无法使用
+from app.models.drift import Drift
 from app.models.gift import Gift
 from app.models.wish import Wish
 
@@ -96,6 +100,26 @@ class User(UserMixin, Base):
             return True
         else:
             return False
+
+    # 判断是否可以索要书籍
+    def can_send_drifts(self):
+        if self.beans < 1:
+            return False
+
+        success_gift_count = Gift.query.filter_by(
+            uid=self.id, launched=True).count()
+        success_receive_count = Drift.query.filter_by(
+            requester_id=self.id, pending=PendingStatus.Success).count()
+        return floor(success_receive_count / 2) <= success_gift_count
+
+    @property
+    def summary(self):
+        return dict(
+            nikename=self.nickname,
+            beans=self.beans,
+            email=self.email,
+            send_receive=str(self.send_counter) + '/' + str(self.receive_counter)
+        )
 
 
 # 为flask-login插件 注册根据用户id获取用户信息的函数

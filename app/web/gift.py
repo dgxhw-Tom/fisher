@@ -3,6 +3,8 @@ from flask_login import login_required, current_user
 
 from . import web
 from .. import db
+from ..helpers.libs.enums import PendingStatus
+from ..models.drift import Drift
 from ..models.gift import Gift
 from ..view_models.gift import MyGifts
 
@@ -48,4 +50,15 @@ def save_to_gifts(isbn):
 
 @web.route('/gifts/<gid>/redraw')
 def redraw_from_gifts(gid):
-    pass
+    gift = Gift.query.filter_by(uid=current_user.id, id=gid, launched=False).first_or_404()
+    drift = Drift.query.filter_by(
+        gift_id=gid, pending=PendingStatus.Waiting
+    ).first()
+
+    if drift:
+        flash('这个礼物还在交易状态，请先处理掉再来撤销你的礼物')
+    else:
+        with db.auto_commit():
+            current_user.beans -= current_app.config['BEANS_UPLOAD_ONE_BOOK']
+            gift.delete()
+    return redirect(url_for('web.my_gifts'))

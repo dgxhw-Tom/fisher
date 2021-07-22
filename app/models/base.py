@@ -11,6 +11,7 @@ from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy, BaseQuery
 from sqlalchemy import Column, SmallInteger, Integer
+from sqlalchemy import orm
 
 
 class SQLAlchemy(_SQLAlchemy):
@@ -27,6 +28,8 @@ class SQLAlchemy(_SQLAlchemy):
 
 
 # 重写 SQLAlchemy 的filter_by，flask_sqlalchemy 也是封装的 SQLAlchemy
+
+
 class Query(BaseQuery):
     def filter_by(self, **kwargs):
         if 'status' not in kwargs.keys():
@@ -36,7 +39,7 @@ class Query(BaseQuery):
 
 
 db = SQLAlchemy()
-
+db.Query = Query
 
 class Base(db.Model):
     # 添加 __abstract__ = True 可以让 sqlalchemy 不去创建表 Base，我们就可以使Base作为基类来创建所有表的公共字段了

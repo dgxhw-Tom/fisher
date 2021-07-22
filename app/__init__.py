@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from flask import Flask
 from flask_mail import Mail
 
@@ -31,9 +33,9 @@ def create_app():
 
     # 注册 SQLAlchemy
     db.init_app(app)
-    db.create_all(app=app)
-    # with app.app_context():
-    #     db.create_all()
+    # db.create_all(app=app)
+    with app.app_context():
+        db.create_all()
 
     return app
 
