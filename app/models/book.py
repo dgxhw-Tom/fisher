@@ -1,10 +1,10 @@
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+from app.models.base import db, Base
 
 
-class Book(db.Model):
+class Book(Base):
     # primary_key 主键； autoincrement 自增
     id = Column(Integer, primary_key=True, autoincrement=True)
     # nullable 是否允许为null

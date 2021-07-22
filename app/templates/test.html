@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+It is a test...
+{#and or#}
+{% if data.age == 12 %}
+    age = {{ data.age }}
+{% elif data.age < 12 %}
+    age < 12
+{% else %}
+    age > 12
+{% endif %}
+
+<h1>-----</h1>
+
+{% for k, v in data2.items() %}
+    <div>{{ k }}</div>
+    {% for datum in v %}
+       name: {{ datum }}
+    {% endfor %}
+
+{% endfor %}
+
+
+
+</body>
+</html>

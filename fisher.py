@@ -37,4 +37,14 @@ if __name__ == '__main__':
 
 2、「业务逻辑」最合理的地方是编写在 Model 层（MVC），而不是 Controller 层
     Model 层不止是表结构的设计
+    多对多关系的表 / Model，需要另一张 表/model 来维护关系
+'''
+
+'''
+1、jinja2 模版语言，进行html模版渲染
+2、flask试图函数会将URL和试图函数名之间加一个endpoint参数，url_for()函数就可以根据endpoint反向构建URL了
+'''
+
+'''
+cookie存储在客户端（浏览器），一般各个网址间是独立的cookie，但可以实现跨网站的cookie共享（比如看腾讯视频的广告是京东的电饭煲，就是拿到了你浏览过京东电饭煲的cookie）
 '''

@@ -23,6 +23,7 @@ class BookViewModel:
         self.summary = data['summary']
         self.pages = data['pages']
 
+    # 可以使用属性访问的方式，来获得该方法的返回值
     @property
     def intro(self):
         intros = filter(lambda x: True if x else False,
