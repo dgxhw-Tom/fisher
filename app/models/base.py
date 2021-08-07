@@ -38,8 +38,7 @@ class Query(BaseQuery):
         return super().filter_by(**kwargs)
 
 
-db = SQLAlchemy()
-db.Query = Query
+db = SQLAlchemy(query_class=Query)
 
 class Base(db.Model):
     # 添加 __abstract__ = True 可以让 sqlalchemy 不去创建表 Base，我们就可以使Base作为基类来创建所有表的公共字段了
